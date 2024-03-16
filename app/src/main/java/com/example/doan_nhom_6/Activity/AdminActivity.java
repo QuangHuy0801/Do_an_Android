@@ -1,14 +1,16 @@
-package com.example.doan_nhom_6;
+package com.example.doan_nhom_6.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class LoginActivity extends AppCompatActivity {
+import com.example.doan_nhom_6.R;
+
+public class AdminActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_admin);
     }
 }

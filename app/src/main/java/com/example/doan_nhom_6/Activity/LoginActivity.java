@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void tvAdminClick() {
         tvAdmin.setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this, AdminActivity.class));
+            startActivity(new Intent(LoginActivity.this, LoginDashboardActivity.class));
         });
     }
 

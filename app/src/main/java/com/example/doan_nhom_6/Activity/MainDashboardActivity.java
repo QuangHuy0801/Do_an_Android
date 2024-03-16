@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.example.doan_nhom_6.R;
 
-public class AdminActivity extends AppCompatActivity {
+public class MainDashboardActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin);
+        setContentView(R.layout.activity_main_dashboard);
     }
 }

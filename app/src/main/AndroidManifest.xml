@@ -25,7 +25,9 @@
         android:theme="@style/Theme.Doan_nhom_6"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".Activity.LoginDashboardActivity"
+            android:exported="false" />
         <activity
             android:name=".Activity.EditProfileActivity"
             android:exported="true" />
@@ -51,7 +53,7 @@
             android:name=".Activity.ProductsActivity"
             android:exported="true" />
         <activity
-            android:name=".Activity.AdminActivity"
+            android:name=".Activity.MainDashboardActivity"
             android:exported="true" />
         <activity
             android:name=".Activity.SignUpActivity"

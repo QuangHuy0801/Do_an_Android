@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitService {
 
-    private String IPAddress="192.168.1.23";
+    private String IPAddress="192.168.1.13";
 
     OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
             .connectTimeout(40, TimeUnit.SECONDS)

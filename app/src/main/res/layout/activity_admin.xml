@@ -7,51 +7,7 @@
     android:background="#ECEBE6"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".Activity.MainDashboardActivity">
-
-    <TextView
-        android:id="@+id/tvHiNameAdmin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:text="Hi nhom 6"
-        android:textColor="#ff3d00"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Dashboard Male Fashion"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/tvHiNameAdmin"
-        app:layout_constraintTop_toBottomOf="@+id/tvHiNameAdmin" />
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/ivAvatarAdmin"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginEnd="32dp"
-        android:src="@drawable/icon_app"
-        app:layout_constraintBottom_toBottomOf="@+id/textView6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvHiNameAdmin" />
-
-    <ListView
-        android:layout_marginTop="40dp"
-        android:id="@+id/lvListStatistic"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/constrainLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView6" />
+    tools:context=".Activity.AdminActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/constrainLayout"
@@ -80,7 +36,6 @@
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/button_background"
                 app:srcCompat="@drawable/statistical" />
 
             <ImageView
@@ -88,6 +43,7 @@
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+
                 app:srcCompat="@drawable/product" />
 
             <ImageView
@@ -95,6 +51,7 @@
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+
                 app:srcCompat="@drawable/icon_invoices" />
 
             <ImageView
@@ -102,6 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button_background"
                 app:srcCompat="@drawable/icon_user" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

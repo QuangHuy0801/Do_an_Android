@@ -59,6 +59,11 @@ dependencies {
     implementation ("com.github.smarteist:autoimageslider:1.4.0")
     //SmsConfirmationView
     implementation ("com.github.fraggjkee:sms-confirmation-view:1.7.1")
+    // Thu vien bieu do thong ke
+    implementation ("com.github.AnyChart:AnyChart-Android:1.1.5")
+    //thu vien export file
+    implementation ("com.android.support:multidex:1.0.3")
+    implementation ("org.apache.poi:poi:3.17")
 
 
 }

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,11 @@ public class LoginDashboardActivity extends AppCompatActivity {
         btnLoginClick();
         tvForgotPasswordAdminClick();
         tvUserClick();
+        appBarClick();
+    }
+
+    private void appBarClick() {
+
     }
 
     private void tvUserClick() {
@@ -87,7 +93,7 @@ public class LoginDashboardActivity extends AppCompatActivity {
                         if (user!=null){
                             Toast.makeText(LoginDashboardActivity.this,"Login Successfully", Toast.LENGTH_LONG).show();
 //                    Log.e("ffff", user.toString());
-                            ObjectSharedPreferences.saveObjectToSharedPreference(LoginDashboardActivity.this, "User", "MODE_PRIVATE", user);
+                            ObjectSharedPreferences.saveObjectToSharedPreference(LoginDashboardActivity.this, "Admin", "MODE_PRIVATE", user);
                             if(user.getAddress()!=null && user.getPhone_Number()!=null){
                                 Address address = new Address(user.getUser_Name(), user.getPhone_Number(), user.getAddress());
                                 ObjectSharedPreferences.saveObjectToSharedPreference(LoginDashboardActivity.this, "address", "MODE_PRIVATE", address);

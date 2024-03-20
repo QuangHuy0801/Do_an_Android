@@ -43,7 +43,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RevenueStatisticActivity extends AppCompatActivity {
+public class ProductsSoldActivity extends AppCompatActivity {
 
     String datefrom, dateto;
     TextView title, dateformto;
@@ -58,7 +58,7 @@ public class RevenueStatisticActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_revenue_statistic);
+        setContentView(R.layout.activity_products_sold);
         setControl();
         setEvent();
     }
@@ -76,14 +76,14 @@ public class RevenueStatisticActivity extends AppCompatActivity {
             datefrom = "2000-01-01";
             btnChooseDateFrom.setText(datefrom);
         }
-        AdminAPI.adminApi.RevenueStatistic(datefrom, dateto).enqueue(new Callback<List<ReportTotal>>() {
+        AdminAPI.adminApi.QuantityStatistic(datefrom, dateto).enqueue(new Callback<List<ReportTotal>>() {
             @Override
             public void onResponse(Call<List<ReportTotal>> call, Response<List<ReportTotal>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     reportTotals = response.body();
                     if (reportTotals.isEmpty()) {
                         // Hiển thị thông báo nếu không có dữ liệu
-                        Toast.makeText(RevenueStatisticActivity.this, "Không có dữ liệu", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ProductsSoldActivity.this, "Không có dữ liệu", Toast.LENGTH_LONG).show();
                     } else {
                         chartLayout.setVisibility(View.VISIBLE);
                         dateformto.setText("Từ: " + datefrom + "\nĐến: " + dateto);
@@ -108,14 +108,14 @@ public class RevenueStatisticActivity extends AppCompatActivity {
                                     .anchor(Anchor.CENTER_BOTTOM)
                                     .offsetX(0d)
                                     .offsetY(5d)
-                                    .format("Tổng tiền: {%Value} vnd");
+                                    .format("{%Value} sản phẩm");
                             // Cấu hình biểu đồ
                             cartesian.animation(true);
                             cartesian.yScale().minimum(0d);
                             cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
                             cartesian.interactivity().hoverMode(HoverMode.BY_X);
                             cartesian.xAxis(0).title("Mặt Hàng");
-                            cartesian.yAxis(0).title("Doanh thu");
+                            cartesian.yAxis(0).title("Số lượng");
 
                             // Hiển thị biểu đồ mới
                             anyChartView.setChart(cartesian);
@@ -127,7 +127,7 @@ public class RevenueStatisticActivity extends AppCompatActivity {
                     }
                 } else {
                     // Xử lý khi response không thành công hoặc không có dữ liệu
-                    Toast.makeText(RevenueStatisticActivity.this, "Không thể lấy dữ liệu", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ProductsSoldActivity.this, "Không thể lấy dữ liệu", Toast.LENGTH_LONG).show();
                     chartLayout.setVisibility(View.GONE);
                 }
             }
@@ -135,7 +135,7 @@ public class RevenueStatisticActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<ReportTotal>> call, Throwable t) {
                 // Xử lý khi gặp lỗi trong quá trình gửi yêu cầu
-                Toast.makeText(RevenueStatisticActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(ProductsSoldActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -151,7 +151,7 @@ public class RevenueStatisticActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Kiểm tra và yêu cầu quyền ghi vào bộ nhớ ngoại trước khi tạo tệp Excel
-                    createExcel();
+                createExcel();
             }
         });
     }
@@ -163,7 +163,7 @@ public class RevenueStatisticActivity extends AppCompatActivity {
 
         ArrayList<String> headers = new ArrayList<>();
         headers.add("Mặt hàng");
-        headers.add("Tổng doanh thu");
+        headers.add("Tổng sản phẩm");
 
         HSSFRow hssfRow = hssfSheet.createRow(0);
         for (int i = 0; i < headers.size(); i++) {
@@ -190,7 +190,7 @@ public class RevenueStatisticActivity extends AppCompatActivity {
 
         File fileOutput = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            fileOutput = new File(storageVolume.getDirectory().getPath() +"/Download/ThongKeDoanhThu.xls");
+            fileOutput = new File(storageVolume.getDirectory().getPath() +"/Download/ThongKeSanPhamDaBan.xls");
         }
 
         try {
@@ -198,7 +198,7 @@ public class RevenueStatisticActivity extends AppCompatActivity {
             hssfWorkbook.write(fileOutputStream);
             fileOutputStream.close();
             hssfWorkbook.close();
-            Toast.makeText(this, "File Created Successfully: Download/ThongKeDoanhThu.xls", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "File Created Successfully: Download/ThongKeSanPhamDaBan.xls", Toast.LENGTH_LONG).show();
 
         } catch (Exception e) {
             Toast.makeText(this, "File Creation Failed", Toast.LENGTH_LONG).show();

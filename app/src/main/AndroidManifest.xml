@@ -24,14 +24,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".Activity.InventoryActivity"
-            android:exported="true" />
+            android:name=".Activity.UnitOfProductStatisticActivity"
+            android:exported="false" />
         <activity
-            android:name=".Activity.RQOrderActivity"
-            android:exported="true" />
+            android:name=".Activity.ProductsSoldActivity"
+            android:exported="false" />
         <activity
-            android:name=".Activity.AdminActivity"
-            android:exported="true" />
+            android:name=".Activity.MainDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ProductStatisticActivity"
+            android:exported="false" />
         <activity
             android:name=".Activity.RevenueStatisticActivity"
             android:exported="true" />
@@ -61,9 +64,6 @@
             android:exported="true" />
         <activity
             android:name=".Activity.ProductsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".Activity.MainDashboardActivity"
             android:exported="true" />
         <activity
             android:name=".Activity.SignUpActivity"

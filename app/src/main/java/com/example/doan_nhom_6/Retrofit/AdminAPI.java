@@ -15,6 +15,12 @@ public interface AdminAPI {
 
     @GET("/loginAdmin")
     Call<User> Login(@Query("id") String id, @Query("password") String password);
-    @GET("/ReportTotal")
-    Call<List<ReportTotal>> ReportTotal(@Query("dateFrom") String dateFrom, @Query("dateTo") String dateTo);
+    @GET("/revenue-statistic")
+    Call<List<ReportTotal>> RevenueStatistic(@Query("dateFrom") String dateFrom, @Query("dateTo") String dateTo);
+    @GET("/quantity-statistic")
+    Call<List<ReportTotal>> QuantityStatistic(@Query("dateFrom") String dateFrom, @Query("dateTo") String dateTo);
+    @GET("/product-statistic")
+    Call<List<ReportTotal>> ProductStatistic();
+    @GET("/unit-of-product-statistic")
+    Call<List<ReportTotal>> UnitOfProductStatistic();
 }

@@ -13,7 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.doan_nhom_6.Activity.MainDashboardActivity;
+import com.example.doan_nhom_6.Activity.ProductStatisticActivity;
+import com.example.doan_nhom_6.Activity.ProductsSoldActivity;
 import com.example.doan_nhom_6.Activity.RevenueStatisticActivity;
+import com.example.doan_nhom_6.Activity.UnitOfProductStatisticActivity;
 import com.example.doan_nhom_6.Model.Statistic;
 import com.example.doan_nhom_6.R;
 
@@ -61,14 +64,19 @@ public class StatisticAdapter extends ArrayAdapter<Statistic> {
                         ((MainDashboardActivity)context).startActivity(intent1);
                         break;
                     case 2:
-//                        Intent intent2 = new Intent(context, SubjectListActivity.class);
-//                        intent2.putExtra("detail", entry);
-//                        ((MainDashboardActivity)context).startActivity(intent2);
-//                        break;
-//                    case 3:
-//                        Intent intent3 = new Intent(context, GenderStatsActivity.class);
-//                        intent3.putExtra("detail", entry);
-//                        ((MainDashboardActivity)context).startActivity(intent3);
+                        Intent intent2 = new Intent(context, ProductsSoldActivity.class);
+                        intent2.putExtra("detail", entry);
+                        ((MainDashboardActivity)context).startActivity(intent2);
+                        break;
+                    case 3:
+                        Intent intent3 = new Intent(context, ProductStatisticActivity.class);
+                        intent3.putExtra("detail", entry);
+                        ((MainDashboardActivity)context).startActivity(intent3);
+                        break;
+                    case 4:
+                        Intent intent4 = new Intent(context, UnitOfProductStatisticActivity.class);
+                        intent4.putExtra("detail", entry);
+                        ((MainDashboardActivity)context).startActivity(intent4);
                         break;
                     default:
                         break;

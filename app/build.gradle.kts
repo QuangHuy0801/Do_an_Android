@@ -64,6 +64,10 @@ dependencies {
     //thu vien export file
     implementation ("com.android.support:multidex:1.0.3")
     implementation ("org.apache.poi:poi:3.17")
-
-
+    //zalopay
+    implementation("com.squareup.okhttp3:okhttp:4.6.0")
+    implementation("commons-codec:commons-codec:1.14")
+    implementation(fileTree("D:\\android-studio\\Doan_nhom_6\\zalopay") {
+        include("*.aar", "*.jar")
+    })
 }

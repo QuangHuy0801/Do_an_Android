@@ -2,65 +2,61 @@ package com.example.doan_nhom_6.Activity;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.doan_nhom_6.Adapter.AdminOrderAdapter;
+import com.example.doan_nhom_6.Model.Order;
 import com.example.doan_nhom_6.R;
+import com.example.doan_nhom_6.Retrofit.OrderAPI;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RQOrderFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import java.util.List;
+
 public class RQOrderFragment extends Fragment {
+    RecyclerView rvAllOrder;
+    AdminOrderAdapter adminOrderAdapter;
+    List<Order> orderList;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public RQOrderFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RQOrderFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RQOrderFragment newInstance(String param1, String param2) {
-        RQOrderFragment fragment = new RQOrderFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_r_q_order, container, false);
+        anhXa(view);
+        loadData();
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_r_q_order, container, false);
+    private void loadData() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        rvAllOrder.setLayoutManager(linearLayoutManager);
+        OrderAPI.orderAPI.getAllOrder().enqueue(new Callback<List<Order>>() {
+            @Override
+            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+                orderList = response.body();
+                adminOrderAdapter = new AdminOrderAdapter(orderList, getContext());
+                rvAllOrder.setAdapter(adminOrderAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Order>> call, Throwable t) {
+                Log.e("====", "Call API Get Order fail");
+            }
+        });
+    }
+
+
+    private void anhXa(View view) {
+        rvAllOrder = view.findViewById(R.id.rcvOrder);
     }
 }

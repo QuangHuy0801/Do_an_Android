@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.example.doan_nhom_6.Activity.AdminFragment;
 import com.example.doan_nhom_6.Activity.IventoryFragment;
 import com.example.doan_nhom_6.Activity.RQOrderFragment;
 import com.example.doan_nhom_6.Activity.StatisticFragment;
@@ -27,7 +28,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter{
             case 2:
                 return new RQOrderFragment();
             case 3:
-                return new RQOrderFragment();
+                return new AdminFragment();
         }
         return null;
     }

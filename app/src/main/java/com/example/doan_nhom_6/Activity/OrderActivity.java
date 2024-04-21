@@ -38,12 +38,7 @@ public class OrderActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
-        setControl();
-        setEvent();
-
-    }
-
-    private void setEvent() {
+        AnhXa();
         appBarClick();
         FragmentManager fragmentManager = getSupportFragmentManager();
         orderFragmentAdapter = new OrderFragmentAdapter(fragmentManager, getLifecycle());
@@ -76,7 +71,6 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void CheckEmpty() {
         User user = ObjectSharedPreferences.getSavedObjectFromPreference(OrderActivity.this, "User", "MODE_PRIVATE", User.class);
@@ -117,7 +111,7 @@ public class OrderActivity extends AppCompatActivity {
         });
     }
 
-    private void setControl() {
+    private void AnhXa() {
         ivHome = findViewById(R.id.ivHome);
         ivUser = findViewById(R.id.ivUser);
         ivCart = findViewById(R.id.ivCart);

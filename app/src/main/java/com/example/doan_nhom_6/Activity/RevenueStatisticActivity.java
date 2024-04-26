@@ -94,7 +94,6 @@ public class RevenueStatisticActivity extends AppCompatActivity {
                             data.add(new ValueDataEntry(reportTotal.getName(), reportTotal.getValue()));
                             totalRevenue += reportTotal.getValue();
                         }
-                        data.add(new ValueDataEntry("Tổng", totalRevenue));
                         Cartesian cartesian = AnyChart.column();
                         // Nếu column chưa được khởi tạo, thực hiện khởi tạo
                         if (column == null) {

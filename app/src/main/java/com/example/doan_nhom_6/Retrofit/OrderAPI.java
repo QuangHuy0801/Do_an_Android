@@ -16,18 +16,22 @@ import retrofit2.http.Query;
 public interface OrderAPI {
     RetrofitService retrofitService = new RetrofitService();
     OrderAPI orderAPI = retrofitService.getRetrofit().create(OrderAPI.class);
+
+    @GET("/allOrder")
+    Call<List<Order>> getAllOrder();
     @FormUrlEncoded
     @POST("/placeorder")
     Call<Order> placeOrder(@Field("user_id") String user_id, @Field("fullname") String fullname,
                            @Field("phoneNumber") String phoneNumber, @Field("address") String address, @Field("paymentMethod") String paymentMethod);
-
     @GET("/order")
     Call<List<Order>> getOrderByUserId(@Query("user_id") String user_id);
 
     @GET("/ordermethod")
     Call<List<Order>> getOrderByUserIdAndPaymentMethod(@Query("user_id") String user_id, @Query("method") String method);
+
     @PATCH("/order/updateStatus/{orderId}")
     Call<Order> updateStatus(@Path("orderId") int id, @Query("newStatus") String newStatus);
-    @GET("/allOrder")
-    Call<List<Order>> getAllOrder();
+
+    @GET("/orderStatus")
+    Call<List<Order>> getOrderByStatus(@Query("status") String status);
 }

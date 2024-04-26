@@ -129,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(LoginActivity.this,"Failed to connect, try again later", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this,"Login failed", Toast.LENGTH_LONG).show();
                 Log.e("ffff", "Kết nối API Login thất bại");
                 Log.e("TAG", t.toString());
             }

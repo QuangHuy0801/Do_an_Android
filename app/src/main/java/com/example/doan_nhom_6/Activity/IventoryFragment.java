@@ -35,8 +35,12 @@ public class IventoryFragment extends Fragment {
             startActivity(new Intent(requireActivity(), AdminCategoryActivity.class));
         });
 
+        cvUser.setOnClickListener(v -> {
+            startActivity(new Intent(requireActivity(), GetAllUserActivity.class));
+        });
+
         cvOrder.setOnClickListener(v -> {
-//            startActivity(new Intent(requireActivity(), AdminOrderActivity.class));
+            startActivity(new Intent(requireActivity(), AdminProductsActivity.class));
         });
     }
 

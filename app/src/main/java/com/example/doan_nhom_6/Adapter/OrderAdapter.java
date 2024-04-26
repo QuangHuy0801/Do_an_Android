@@ -1,11 +1,13 @@
 package com.example.doan_nhom_6.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -14,11 +16,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.doan_nhom_6.Model.Order;
 import com.example.doan_nhom_6.R;
+import com.example.doan_nhom_6.Retrofit.OrderAPI;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
 
@@ -32,13 +39,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OrderAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_order, parent, false);
-        return new ViewHolder(inflate);
+        return new OrderAdapter.ViewHolder(inflate);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OrderAdapter.ViewHolder holder, int position) {
         holder.orderLayout.setBackground(context.getDrawable(R.drawable.order_item_background));
         Order order = orders.get(position);
         if (order.getId()<10)
@@ -52,6 +59,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         NumberFormat en = NumberFormat.getInstance(localeEN);
         holder.tvTotalPrice.setText(en.format(order.getTotal()));
         holder.tvQuantity.setText(order.getOrder_Item().size()+"");
+        holder.tvStatus.setText(order.getStatus());
 
         holder.itemView.setOnClickListener(v -> {
             if(holder.orderLayout2.getVisibility() == View.VISIBLE){
@@ -84,6 +92,37 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         holder.recyclerViewOrderItem.setLayoutManager(linearLayoutManager);
         holder.orderItemAdapter = new OrderItemAdapter(order.getOrder_Item(), context);
         holder.recyclerViewOrderItem.setAdapter(holder.orderItemAdapter);
+
+        if (order.getStatus().equals("Canceled") || order.getStatus().equals("Completed"))
+        {
+            holder.tvTrangthai.setVisibility(View.INVISIBLE);
+        }
+
+        holder.tvTrangthai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OrderAPI.orderAPI.updateStatus(order.getId(), "Canceled").enqueue(new Callback<Order>() {
+                    @Override
+                    public void onResponse(Call<Order> call, Response<Order> response) {
+                        Order orderStatus = response.body();
+                        if (orderStatus != null)
+                        {
+                            orders.set(holder.getAdapterPosition(),orderStatus);
+                            notifyItemChanged(holder.getAdapterPosition());
+                            Toast.makeText(context, "Đơn hàng hủy thành công...", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(context, "Đơn hàng hủy thất bại...?", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Order> call, Throwable t) {
+                        Log.e("====", "Call API Update Status Order fail");
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -92,7 +131,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvOderId, tvPurchaseDay, tvQuantity,tvTotalPrice, tvTotalItem, tvFullName, tvPhoneNumber, tvAddress;
+        TextView tvOderId, tvPurchaseDay, tvQuantity,tvTotalPrice, tvTotalItem, tvFullName, tvPhoneNumber, tvAddress, tvStatus, tvTrangthai;
         ImageView ivShowMore, ivHide;
         ConstraintLayout orderLayout, orderLayout1, orderLayout2;
         RecyclerView.Adapter orderItemAdapter;
@@ -112,6 +151,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
             tvFullName = itemView.findViewById(R.id.tvFullName);
             tvPhoneNumber =itemView.findViewById(R.id.tvPhoneNumber);
             tvAddress =itemView.findViewById(R.id.tvAddress);
+            tvStatus = itemView.findViewById(R.id.tvStatus);
+            tvTrangthai = itemView.findViewById(R.id.tvHuyDon);
         }
     }
 }

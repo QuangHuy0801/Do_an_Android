@@ -26,7 +26,7 @@ public class MainDashboardActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     TextView tvHiNameAdmin;
-    ImageView ivAvatarAdmin;
+//    ImageView ivAvatarAdmin;
     User Admin;
     ViewPagerAdapter adapter;
     @Override
@@ -90,7 +90,7 @@ public class MainDashboardActivity extends AppCompatActivity {
 
     private void setControl() {
         tvHiNameAdmin = findViewById(R.id.tvHiNameAdmin);
-        ivAvatarAdmin = findViewById(R.id.ivAvatarAdmin);
+//        ivAvatarAdmin = findViewById(R.id.ivAvatarAdmin);
         bottomNavigationView =findViewById(R.id.bottom_navigation);
         viewPager =findViewById(R.id.viewpager);
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -106,11 +106,11 @@ public class MainDashboardActivity extends AppCompatActivity {
     private void LoadUserInfor() {
         Admin = ObjectSharedPreferences.getSavedObjectFromPreference(MainDashboardActivity.this, "Admin", "MODE_PRIVATE", User.class);
         tvHiNameAdmin.setText("Hi "+ Admin.getUser_Name());
-        try {
-            Glide.with(getApplicationContext()).load(Admin.getAvatar()).into(ivAvatarAdmin);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+//        try {
+//            Glide.with(getApplicationContext()).load(Admin.getAvatar()).into(ivAvatarAdmin);
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
     }
 }

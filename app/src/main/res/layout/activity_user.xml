@@ -83,7 +83,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Võ Hoàn Hảo"
+                        android:text="user"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -117,7 +117,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:text="hoanhao1512"
+                            android:text="123"
                             android:textColor="#FFFFFF"
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -377,7 +377,7 @@
                                 android:layout_width="240dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="haovo1512@gmail.com"
+                                android:text="abc@gmail.com"
                                 android:textAlignment="viewEnd"
                                 android:textColor="#222222"
                                 android:textSize="16sp" />
@@ -408,7 +408,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/view1">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="86dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Phone:"
@@ -420,7 +420,7 @@
                                 android:layout_width="240dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="0799197703"
+                                android:text="0988"
                                 android:textAlignment="viewEnd"
                                 android:textColor="#222222"
                                 android:textSize="16sp" />
@@ -451,7 +451,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/view2">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="99dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Address:"
@@ -463,7 +463,7 @@
                                 android:layout_width="240dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="498, Lê Văn Việt, Tăng Nhơn Phú A, Quận 9, Thành Phố Hồ Chí Minh"
+                                android:text="địa chỉ"
                                 android:textAlignment="viewEnd"
                                 android:textColor="#222222"
                                 android:textSize="16sp" />
@@ -472,7 +472,7 @@
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btnLogout"
-                        android:layout_width="180dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
@@ -491,7 +491,7 @@
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btnEditProfile"
-                        android:layout_width="180dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"

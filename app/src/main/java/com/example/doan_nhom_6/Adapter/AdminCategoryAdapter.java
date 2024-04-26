@@ -1,10 +1,13 @@
 package com.example.doan_nhom_6.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,31 +60,64 @@ public class AdminCategoryAdapter extends RecyclerView.Adapter<AdminCategoryAdap
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (category.getProduct() == null || category.getProduct().isEmpty()){
-                    CategoryAPI.categoryAPI.DeleteCategory(category.getId()).enqueue(new Callback<Category>() {
-                        @Override
-                        public void onResponse(Call<Category> call, Response<Category> response) {
-                            Log.e("====", response.message());
-                            if (response.isSuccessful()){
-                                categories.remove(category);
-                                notifyItemRemoved(holder.getAdapterPosition());
-                                Toast.makeText(context, "Xóa thành công...!", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                Toast.makeText(context, "Xóa không thành công???", Toast.LENGTH_SHORT).show();
-                            }
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Xác nhận xóa");
+                builder.setMessage("Bạn có chắc chắn muốn xóa loại sản phẩm này?");
+                builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (category.getProduct() == null || category.getProduct().isEmpty()) {
+                            CategoryAPI.categoryAPI.DeleteCategory(category.getId()).enqueue(new Callback<Category>() {
+                                @Override
+                                public void onResponse(Call<Category> call, Response<Category> response) {
+                                    Log.e("====", response.message());
+                                    if (response.isSuccessful()) {
+                                        categories.remove(category);
+                                        notifyItemRemoved(holder.getAdapterPosition());
+                                        Toast.makeText(context, "Xóa thành công...!", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(context, "Xóa không thành công???", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Category> call, Throwable t) {
+                                    Log.e("====", t.getMessage());
+                                }
+                            });
+                        } else {
+                            Toast.makeText(context, "Không thể xóa loại sản phẩm đã có sản phẩm...!", Toast.LENGTH_SHORT).show();
                         }
-                        @Override
-                        public void onFailure(Call<Category> call, Throwable t) {
-                            Log.e("====", t.getMessage());
-                        }
-                    });
-                }
-                else{
-                    Toast.makeText(context, "Không thể xóa loại sản phẩm đã có sản phẩm...!", Toast.LENGTH_SHORT).show();
-                }
+                    }
+                });
+
+                builder.setNegativeButton("Hủy bỏ", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                // Get the AlertDialog instance
+                AlertDialog dialog = builder.create();
+
+                // Set color for positive and negative button text
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialogInterface) {
+                        Button positiveButton = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE);
+                        positiveButton.setTextColor(context.getResources().getColor(android.R.color.black));
+
+                        Button negativeButton = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_NEGATIVE);
+                        negativeButton.setTextColor(context.getResources().getColor(android.R.color.black));
+                    }
+                });
+
+                // Show the AlertDialog
+                dialog.show();
             }
         });
+
 
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override

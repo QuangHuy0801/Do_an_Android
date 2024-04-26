@@ -174,7 +174,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="8dp"
-                            android:text="Võ Hoàn Hảo"
+                            android:text="User"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -198,7 +198,7 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="16dp"
-                            android:text="498 Lê Văn Việt, Phường Tăng Nhơn Phú A, Thành Phố Thủ Đức, Thành Phố Hồ Chí Minh"
+                            android:text="địa chỉ"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
@@ -216,7 +216,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="(0799197703)"
+                            android:text="(09333)"
                             app:layout_constraintBottom_toBottomOf="@+id/tvUserName"
                             app:layout_constraintStart_toEndOf="@+id/tvUserName"
                             app:layout_constraintTop_toTopOf="@+id/tvUserName" />

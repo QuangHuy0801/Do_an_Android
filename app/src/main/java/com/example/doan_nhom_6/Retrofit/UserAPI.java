@@ -1,6 +1,8 @@
 package com.example.doan_nhom_6.Retrofit;
 import com.example.doan_nhom_6.Model.User;
 
+import java.util.List;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -20,7 +22,8 @@ public interface UserAPI {
 
     @GET("/login")
     Call<User> Login(@Query("id") String id, @Query("password") String password);
-
+    @GET("/getalluser")
+    Call<List<User>> GetAllUser();
     @FormUrlEncoded
     @POST("/signup")
     Call<User> SignUp(@Field("username") String username, @Field("fullname") String fullname, @Field("email") String email, @Field("password")String password);

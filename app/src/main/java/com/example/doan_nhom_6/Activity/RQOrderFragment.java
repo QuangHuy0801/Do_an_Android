@@ -10,53 +10,81 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.example.doan_nhom_6.Adapter.AdminOrderAdapter;
-import com.example.doan_nhom_6.Model.Order;
+import android.widget.ImageView;
+import com.example.doan_nhom_6.Adapter.AdminOrderFragmentAdapter;
+import com.example.doan_nhom_6.Interface.OnTabLayoutChangedListener;
+import com.example.doan_nhom_6.Fragment.CompletedOrderFragment;
+import com.example.doan_nhom_6.Fragment.CanceledOrderFragment;
+import com.example.doan_nhom_6.Fragment.DeliveringOrderFragment;
+import com.example.doan_nhom_6.Fragment.PendingOrderFragment;
 import com.example.doan_nhom_6.R;
-import com.example.doan_nhom_6.Retrofit.OrderAPI;
+import com.google.android.material.tabs.TabLayout;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import java.util.List;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager2.widget.ViewPager2;
 
-public class RQOrderFragment extends Fragment {
-    RecyclerView rvAllOrder;
-    AdminOrderAdapter adminOrderAdapter;
-    List<Order> orderList;
+public class RQOrderFragment extends Fragment implements OnTabLayoutChangedListener {
+    TabLayout tabLayout;
+    ViewPager2 viewPager;
+    AdminOrderFragmentAdapter adminOrderFragmentAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_r_q_order, container, false);
-        anhXa(view);
-        loadData();
-        return view;
-    }
+        View rootView = inflater.inflate(R.layout.fragment_r_q_order, container, false);
+        anhXa(rootView);
+        FragmentManager fragmentManager = getChildFragmentManager();
+        OnTabLayoutChangedListener onTabLayoutChangedListener = this;
+        adminOrderFragmentAdapter = new AdminOrderFragmentAdapter(fragmentManager, getLifecycle(), onTabLayoutChangedListener);
+        viewPager.setAdapter(adminOrderFragmentAdapter);
+        tabLayout.addTab(tabLayout.newTab().setText("Chờ Xác Nhận"));
+        tabLayout.addTab(tabLayout.newTab().setText("Đang Giao"));
+        tabLayout.addTab(tabLayout.newTab().setText("Đã Giao"));
+        tabLayout.addTab(tabLayout.newTab().setText("Đã Hủy"));
 
-    private void loadData() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        rvAllOrder.setLayoutManager(linearLayoutManager);
-        OrderAPI.orderAPI.getAllOrder().enqueue(new Callback<List<Order>>() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
-                orderList = response.body();
-                adminOrderAdapter = new AdminOrderAdapter(orderList, getContext());
-                rvAllOrder.setAdapter(adminOrderAdapter);
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+                onTabLayoutChanged(tab.getPosition());
             }
 
             @Override
-            public void onFailure(Call<List<Order>> call, Throwable t) {
-                Log.e("====", "Call API Get Order fail");
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                tabLayout.selectTab(tabLayout.getTabAt(position));
+            }
+        });
+
+        return rootView;
+    }
+
+    @Override
+    public void onTabLayoutChanged(int position) {
+        Fragment fragment = getChildFragmentManager().findFragmentByTag("f" + position);
+        if (fragment instanceof PendingOrderFragment) {
+            ((PendingOrderFragment) fragment).ReloadDataOnTabLayoutChaged();
+        } else if (fragment instanceof DeliveringOrderFragment) {
+            ((DeliveringOrderFragment) fragment).ReloadDataOnTabLayoutChaged();
+        } else if (fragment instanceof CompletedOrderFragment) {
+            ((CompletedOrderFragment) fragment).ReloadDataOnTabLayoutChaged();
+        } else if (fragment instanceof CanceledOrderFragment) {
+            ((CanceledOrderFragment) fragment).ReloadDataOnTabLayoutChaged();
+        }
     }
 
 
-    private void anhXa(View view) {
-        rvAllOrder = view.findViewById(R.id.rcvOrder);
+    private void anhXa(View rootView) {
+        tabLayout = rootView.findViewById(R.id.tabLayoutOrder);
+        viewPager = rootView.findViewById(R.id.viewPagerOrder);
     }
 }

@@ -81,6 +81,12 @@
                 android:text="Chọn ngày"
                 android:textColor="@color/black"
                 android:textSize="18dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnStartRevenue"
                 android:layout_width="100dp"

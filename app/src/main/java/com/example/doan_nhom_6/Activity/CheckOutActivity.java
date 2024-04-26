@@ -91,7 +91,7 @@ public class CheckOutActivity extends AppCompatActivity {
                         StrictMode.ThreadPolicy.Builder().permitAll().build();
                 StrictMode.setThreadPolicy(policy);
                 // ZaloPay SDK Init
-                ZaloPaySDK.init(2553, Environment.SANDBOX);
+//                ZaloPaySDK.init(2553, Environment.SANDBOX);
                 CreateOrder orderApi = new CreateOrder();
 
                 try {

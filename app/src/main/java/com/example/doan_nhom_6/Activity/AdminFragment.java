@@ -1,66 +1,193 @@
 package com.example.doan_nhom_6.Activity;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.doan_nhom_6.Model.Order;
+import com.example.doan_nhom_6.Model.User;
 import com.example.doan_nhom_6.R;
+import com.example.doan_nhom_6.Retrofit.AdminAPI;
+import com.example.doan_nhom_6.Retrofit.UserAPI;
+import com.example.doan_nhom_6.Somethings.ObjectSharedPreferences;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AdminFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.text.NumberFormat;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AdminFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    ImageView ivAvatar;
+    Button btnEditProfile, btnLogout;
+    TextView tvFullName, tvId,tvChangePassword, tvEmail, tvPhone, tvAddress;
+    User admin;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public AdminFragment() {
-        // Required empty public constructor
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_admin, container, false);
+        setControl(view);
+        setEvent();
+        return view;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AdminFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AdminFragment newInstance(String param1, String param2) {
-        AdminFragment fragment = new AdminFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private void setEvent() {
+        btnLogoutClick();
+        tvChangePasswordClick();
+        btnEditProfileClick();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onResume() {
+        super.onResume();
+        LoadData();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin, container, false);
+    private void btnEditProfileClick() {
+        btnEditProfile.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), EditProfileAdminActivity.class));
+        });
+    }
+
+    private void tvChangePasswordClick() {
+        tvChangePassword.setOnClickListener(v -> {
+            Dialog dialog = new Dialog(requireContext());
+            dialog.setContentView(R.layout.dialog_change_password);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().setGravity(Gravity.BOTTOM);
+            dialog.show();
+            // Anh xa dialog
+            ConstraintLayout clChangePassword = dialog.findViewById(R.id.clChangePassword);
+            ConstraintLayout clChangePasswordSuccess = dialog.findViewById(R.id.clChangePasswordSuccess);
+            EditText etOldPassword = dialog.findViewById(R.id.etOldPassword);
+            EditText etNewPassword = dialog.findViewById(R.id.etNewPassword);
+            EditText etReNewPassword = dialog.findViewById(R.id.etReNewPassword);
+            TextView tvErrorChangePassword = dialog.findViewById(R.id.tvErrorChangePassword);
+            Button btnChangePassword = dialog.findViewById(R.id.btnChangePassword);
+            Button btnOK = dialog.findViewById(R.id.btnOk);
+            // ====
+            btnChangePassword.setOnClickListener(v1 -> {
+                String password = etOldPassword.getText().toString();
+                String newPassword = etNewPassword.getText().toString();
+                String reNewPassword = etReNewPassword.getText().toString();
+                admin = ObjectSharedPreferences.getSavedObjectFromPreference(requireContext(), "Admin", "MODE_PRIVATE", User.class);
+                if (password.equals(admin.getPassword())) {
+                    if (newPassword.equals(reNewPassword)) {
+                        AdminAPI.adminApi.changePassword(admin.getId(), newPassword).enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                String pass = response.body();
+                                if (pass != null) {
+                                    clChangePassword.setVisibility(View.GONE);
+                                    clChangePasswordSuccess.setVisibility(View.VISIBLE);
+                                    admin.setPassword(pass);
+                                    ObjectSharedPreferences.saveObjectToSharedPreference(requireContext(), "User", "MODE_PRIVATE", admin);
+                                    btnOK.setOnClickListener(v2 -> {
+                                        dialog.dismiss();
+                                    });
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+
+                            }
+                        });
+                    } else {
+                        tvErrorChangePassword.setText("New password and confirm password do not match!");
+                    }
+                } else {
+                    tvErrorChangePassword.setText("Your password is not correct");
+                }
+            });
+        });
+    }
+
+    private void btnLogoutClick() {
+        btnLogout.setOnClickListener(v -> {
+            admin = ObjectSharedPreferences.getSavedObjectFromPreference(requireContext(), "Admin", "MODE_PRIVATE", User.class);
+            if (admin.getPassword() == null) {
+//                googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(Task<Void> task) {
+//                        finish();
+//                        ObjectSharedPreferences.saveObjectToSharedPreference(UserActivity.this, "User", "MODE_PRIVATE", null);
+//                        startActivity(new Intent(UserActivity.this,LoginActivity.class));
+//                    }
+//                });
+            } else {
+                ObjectSharedPreferences.saveObjectToSharedPreference(requireContext(), "Admin", "MODE_PRIVATE", null);
+                startActivity(new Intent(requireContext(), LoginDashboardActivity.class));
+            }
+
+        });
+    }
+
+    private void LoadData() {
+        admin = ObjectSharedPreferences.getSavedObjectFromPreference(requireContext(), "Admin", "MODE_PRIVATE", User.class);
+        AdminAPI.adminApi.Login(admin.getId(), admin.getPassword()).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                admin = response.body();
+                ObjectSharedPreferences.saveObjectToSharedPreference(requireContext(), "Admin", "MODE_PRIVATE", admin);
+                Glide.with(requireContext()).load(admin.getAvatar()).into(ivAvatar);
+                tvFullName.setText(admin.getUser_Name());
+                tvId.setText(admin.getId());
+                int totalPrice = 0;
+                for (Order o : admin.getOrder()) {
+                    totalPrice += o.getTotal();
+                }
+                Locale localeEN = new Locale("en", "EN");
+                NumberFormat en = NumberFormat.getInstance(localeEN);
+                tvPhone.setText(admin.getPhone_Number());
+                tvAddress.setText(admin.getAddress());
+                tvEmail.setText(admin.getEmail());
+                if (admin.getLogin_Type().equals("google")) {
+                    tvChangePassword.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+
+    private void setControl(View view) {
+        tvFullName = view.findViewById(R.id.tvFullName);
+        tvId = view.findViewById(R.id.tvId);
+        tvChangePassword = view.findViewById(R.id.tvChangePassword);
+        tvEmail = view.findViewById(R.id.tvEmail);
+        tvPhone = view.findViewById(R.id.tvPhone);
+        tvAddress = view.findViewById(R.id.tvAddress);
+        btnEditProfile = view.findViewById(R.id.btnEditProfile);
+        btnLogout = view.findViewById(R.id.btnLogout);
+        ivAvatar = view.findViewById(R.id.ivAvatar);
     }
 }

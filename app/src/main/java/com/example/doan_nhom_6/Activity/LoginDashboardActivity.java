@@ -56,7 +56,7 @@ public class LoginDashboardActivity extends AppCompatActivity {
 
     private void tvForgotPasswordAdminClick() {
         tvForgotPasswordAdmin.setOnClickListener(v -> {
-            startActivity(new Intent(LoginDashboardActivity.this, ForgotPasswordActivity.class));
+            startActivity(new Intent(LoginDashboardActivity.this, ForgotPasswordAdminActivity.class));
         });
     }
 
@@ -111,7 +111,7 @@ public class LoginDashboardActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-                        Toast.makeText(LoginDashboardActivity.this,"Failed to connect, try again later", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginDashboardActivity.this,"Login failed", Toast.LENGTH_LONG).show();
                         Log.e("ffff", "Kết nối API Login thất bại");
                         Log.e("TAG", t.toString());
                     }

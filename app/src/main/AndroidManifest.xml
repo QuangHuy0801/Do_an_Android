@@ -24,6 +24,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.AdminProductsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.GetAllUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ForgotPasswordAdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.EditProfileAdminActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.AdminCategoryActivity"
             android:exported="false" />
         <activity
@@ -52,7 +64,19 @@
             android:exported="true" />
         <activity
             android:name=".Activity.CheckOutActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app"
+                    android:scheme="demozpdk" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Activity.ShowDetailActivity"
             android:exported="true" />

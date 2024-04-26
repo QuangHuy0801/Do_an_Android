@@ -18,6 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.doan_nhom_6.Interface.UpdateStatusInterface;
 import com.example.doan_nhom_6.Model.Order;
 import com.example.doan_nhom_6.R;
 import com.example.doan_nhom_6.Retrofit.OrderAPI;
@@ -34,17 +35,18 @@ import retrofit2.Response;
 public class AdminOrderAdapter extends RecyclerView.Adapter<AdminOrderAdapter.ViewHolder>{
     List<Order> orders;
     Context context;
-//    private static int count = 0;
-    public AdminOrderAdapter(List<Order> orders, Context context) {
+    final UpdateStatusInterface updateStatusInterface;
+    public AdminOrderAdapter(List<Order> orders, Context context, UpdateStatusInterface updateStatusInterface) {
         this.orders = orders;
         this.context = context;
+        this.updateStatusInterface = updateStatusInterface;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_admin_order, parent, false);
-        return new ViewHolder(inflate);
+        return new AdminOrderAdapter.ViewHolder(inflate);
     }
 
     @Override
@@ -112,6 +114,7 @@ public class AdminOrderAdapter extends RecyclerView.Adapter<AdminOrderAdapter.Vi
                         if(updateStatusOrder != null){
                             orders.set(holder.getAdapterPosition(), updateStatusOrder);
                             notifyItemChanged(holder.getAdapterPosition());
+                            updateStatusInterface.ReloadData();
                             Toast.makeText(context, "Cập nhật trạng thái đơn hàng thành công...!", Toast.LENGTH_SHORT).show();
                         }
                         else
@@ -127,7 +130,9 @@ public class AdminOrderAdapter extends RecyclerView.Adapter<AdminOrderAdapter.Vi
                 });
             }
         });
-
+        if(order.getStatus().equals("Delivering")){
+            holder.tvTrangThai.setText("Hoàn tất đơn hàng");
+        }
         holder.tvTrangThai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,8 +143,8 @@ public class AdminOrderAdapter extends RecyclerView.Adapter<AdminOrderAdapter.Vi
                             Order updateStatusOrder = response.body();
                             if(updateStatusOrder != null){
                                 orders.set(holder.getAdapterPosition(), updateStatusOrder);
-                                holder.tvTrangThai.setText("Hoàn tất đơn hàng");
-                                notifyItemChanged(holder.getAdapterPosition(), "partial_refresh");
+                                notifyItemChanged(holder.getAdapterPosition());
+                                updateStatusInterface.ReloadData();
                                 Toast.makeText(context, "Cập nhật trạng thái đơn hàng thành công...!", Toast.LENGTH_SHORT).show();
                             }
                             else
@@ -162,6 +167,7 @@ public class AdminOrderAdapter extends RecyclerView.Adapter<AdminOrderAdapter.Vi
                             if(updateStatusOrder != null){
                                 orders.set(holder.getAdapterPosition(), updateStatusOrder);
                                 notifyItemChanged(holder.getAdapterPosition());
+                                updateStatusInterface.ReloadData();
                                 Toast.makeText(context, "Cập nhật trạng thái đơn hàng thành công...!", Toast.LENGTH_SHORT).show();
                             }
                             else
@@ -210,7 +216,7 @@ public class AdminOrderAdapter extends RecyclerView.Adapter<AdminOrderAdapter.Vi
             tvPaymentMethod = itemView.findViewById(R.id.tvPaymentMethod);
             tvTrangThai = itemView.findViewById(R.id.tvTrangThai);
             tvHuyDon = itemView.findViewById(R.id.tvHuyDon);
-            tvStatus = itemView.findViewById(R.id.textView31);
+            tvStatus = itemView.findViewById(R.id.tvStatus);
         }
     }
 }

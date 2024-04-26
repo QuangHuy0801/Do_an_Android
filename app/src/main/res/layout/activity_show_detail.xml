@@ -72,7 +72,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/background_white"
             android:orientation="vertical">
 
@@ -205,7 +205,7 @@
 
                     <TextView
                         android:id="@+id/tvAvailable"
-                        android:layout_width="74dp"
+                        android:layout_width="63dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:paddingStart="8dp"
@@ -226,7 +226,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="           Sold:"
+                        android:text="     Sold:"
                         android:textColor="#373b54"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -265,24 +265,34 @@
                         android:textColor="#373b54"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/tvDescription"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tvDescription"
+                    <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="6dp"
-                        android:layout_marginEnd="16dp"
-                        android:gravity="fill"
-                        android:text="Description:"
-                        android:textColor="#373b54"
-                        android:textSize="16sp"
+                        android:layout_height="match_parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                        app:layout_constraintTop_toBottomOf="@+id/textView8"
+                        app:layout_constraintVertical_bias="0.142">
+
+                        <TextView
+                            android:id="@+id/tvDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="16dp"
+                            android:text="Description:"
+                            android:textColor="#373b54"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </ScrollView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </ScrollView>

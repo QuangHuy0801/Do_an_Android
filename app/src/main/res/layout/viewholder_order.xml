@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
-            android:text="15/12/2022"
+            android:text="30/03/2024"
             app:layout_constraintBottom_toBottomOf="@+id/tvOderId"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvOderId" />
@@ -70,8 +70,8 @@
             android:id="@+id/ivShowMore"
             android:layout_width="30dp"
             android:layout_height="20dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="54dp"
+            android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tvTotalPrice"
             app:layout_constraintTop_toBottomOf="@+id/tvTotalPrice"
@@ -81,8 +81,8 @@
             android:id="@+id/ivHide"
             android:layout_width="30dp"
             android:layout_height="20dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="54dp"
+            android:layout_marginBottom="16dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tvTotalPrice"
@@ -108,6 +108,31 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/tvPurchaseDay"
             app:layout_constraintTop_toBottomOf="@+id/tvPurchaseDay" />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Completed"
+            android:textColor="#FF5722"
+            android:textSize="17sp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="@+id/textView25"
+            app:layout_constraintTop_toBottomOf="@+id/textView25"/>
+
+        <TextView
+            android:id="@+id/tvHuyDon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tv_red_background"
+            android:layout_marginTop="8dp"
+            android:text="Huỷ đơn"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:padding="5dp"
+            app:layout_constraintStart_toStartOf="@+id/tvStatus"
+            app:layout_constraintTop_toBottomOf="@+id/tvStatus"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -169,7 +194,7 @@
             android:id="@+id/tvFullName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Võ Hoàn Hảo"
+            android:text="Nguyễn Tiến Ngọc"
             app:layout_constraintBottom_toBottomOf="@+id/textView26"
             app:layout_constraintStart_toEndOf="@+id/textView26"
             app:layout_constraintTop_toTopOf="@+id/textView26" />
@@ -194,7 +219,7 @@
             android:id="@+id/tvPhoneNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0799197703"
+            android:text="0123456789"
             app:layout_constraintBottom_toBottomOf="@+id/textView30"
             app:layout_constraintStart_toEndOf="@+id/textView30"
             app:layout_constraintTop_toBottomOf="@+id/textView26"
@@ -205,7 +230,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="498, Lê Văn Việt, Phường Tăng Nhơn Phú A, TP. Thủ Đức, TP. Hồ Chí Minh"
+            android:text="97 Man Thiện, Phường Tăng Nhơn Phú A, TP. Thủ Đức, TP. Hồ Chí Minh"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView31"
             app:layout_constraintTop_toBottomOf="@+id/textView30" />

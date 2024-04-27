@@ -10,6 +10,7 @@
     tools:context=".Activity.MainActivity">
 
     <ScrollView
+        android:id="@+id/scrollView4"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/constrainLayout"
@@ -190,6 +191,18 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/ivSearchMap"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/icon_map_search" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/constrainLayout"

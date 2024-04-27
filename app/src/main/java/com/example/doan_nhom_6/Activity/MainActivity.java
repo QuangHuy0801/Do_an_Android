@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tvHiName;
     EditText etSearch;
 
-    ImageView ivAvatar, ivHome, ivUser, ivCart, ivHistory, ivSearch;
+    ImageView ivAvatar, ivHome, ivUser, ivCart, ivHistory, ivSearch,ivSearchMap;
     User user;
 
     //Api
@@ -94,6 +94,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void appBarClick() {
+        ivSearchMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                startActivity(intent);
+            }
+        });
         ivHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,5 +216,6 @@ public class MainActivity extends AppCompatActivity {
         ivHistory = findViewById(R.id.ivHistory);
         etSearch = findViewById(R.id.etSearch);
         ivSearch = findViewById(R.id.ivSearch);
+        ivSearchMap =findViewById(R.id.ivSearchMap);
     }
 }

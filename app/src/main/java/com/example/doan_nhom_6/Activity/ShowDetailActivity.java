@@ -3,9 +3,11 @@ package com.example.doan_nhom_6.Activity;
 import static java.lang.Integer.parseInt;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,9 +17,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.doan_nhom_6.Adapter.SliderAdapter;
 import com.example.doan_nhom_6.Model.Cart;
 import com.example.doan_nhom_6.Model.Product;
+import com.example.doan_nhom_6.Model.Promotion;
 import com.example.doan_nhom_6.Model.User;
 import com.example.doan_nhom_6.R;
 import com.example.doan_nhom_6.Retrofit.CartAPI;
+import com.example.doan_nhom_6.Retrofit.PromotionAPI;
 import com.example.doan_nhom_6.Somethings.ObjectSharedPreferences;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
@@ -29,13 +33,14 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.GET;
 
 public class ShowDetailActivity extends AppCompatActivity {
-    TextView tvTitle, tvdescription, tvPrice, tvTotalPrice, tvSold, tvAvailable, tvNumber, tvAddToCart;
+    TextView tvTitle, tvdescription, tvPrice, tvTotalPrice, tvSold, tvAvailable, tvNumber, tvAddToCart, tvPriceDisCount, tvDiscount;
     ImageView ivMinus, ivPlus;
     Product product;
-
     ConstraintLayout clBack;
+    LinearLayout lnPriceDiscount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,14 +95,38 @@ public class ShowDetailActivity extends AppCompatActivity {
 
     private void LoadProduct() {
         LoadImage();
-        tvTitle.setText(product.getProduct_Name());
-        tvdescription.setText(product.getDescription());
         Locale localeEN = new Locale("en", "EN");
         NumberFormat en = NumberFormat.getInstance(localeEN);
-        tvPrice.setText(en.format(product.getPrice()));
+        PromotionAPI.promotionAPI.checkProDuctInPromotion(product.getId()).enqueue(new Callback<Promotion>() {
+            @Override
+            public void onResponse(Call<Promotion> call, Response<Promotion> response) {
+                Promotion promotion = response.body();
+                if(promotion != null){
+                    lnPriceDiscount.setVisibility(View.VISIBLE);
+                    tvDiscount.setText("-" + (int) (promotion.getDiscountPercent()*100) + "%");
+                    tvPriceDisCount.setText(en.format(product.getPrice()));
+                    tvPriceDisCount.setPaintFlags(tvPriceDisCount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    tvPriceDisCount.getPaint().setFakeBoldText(true);
+                    tvPriceDisCount.setTextColor(Color.BLACK);
+                    double Price = product.getPrice() - (product.getPrice() * promotion.getDiscountPercent());
+                    tvPrice.setText(en.format(Price));
+                    tvTotalPrice.setText(en.format(Price));
+                }else{
+                    lnPriceDiscount.setVisibility(View.GONE);
+                    tvPrice.setText(en.format(product.getPrice()));
+                    tvTotalPrice.setText(en.format(product.getPrice()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Promotion> call, Throwable t) {
+                Toast.makeText(ShowDetailActivity.this, "Call API Check Product in promotion fail", Toast.LENGTH_SHORT).show();
+            }
+        });
+        tvTitle.setText(product.getProduct_Name());
+        tvdescription.setText(product.getDescription());
         tvSold.setText(String.valueOf(product.getSold()));
         tvAvailable.setText(String.valueOf(product.getQuantity()));
-        tvTotalPrice.setText(en.format(product.getPrice()));
         tvNumber.setText("1");
 
     }
@@ -127,7 +156,7 @@ public class ShowDetailActivity extends AppCompatActivity {
                     tvNumber.setText(String.valueOf(number));
                     Locale localeEN = new Locale("en", "EN");
                     NumberFormat en = NumberFormat.getInstance(localeEN);
-                    tvTotalPrice.setText(en.format(product.getPrice()*number));
+                    tvTotalPrice.setText(en.format(parseInt(tvPrice.getText().toString().replace(",", ""))*number));
                 }
             }
         });
@@ -142,7 +171,7 @@ public class ShowDetailActivity extends AppCompatActivity {
                     tvNumber.setText(String.valueOf(number));
                     Locale localeEN = new Locale("en", "EN");
                     NumberFormat en = NumberFormat.getInstance(localeEN);
-                    tvTotalPrice.setText(en.format(product.getPrice()*number));
+                    tvTotalPrice.setText(en.format(parseInt(tvPrice.getText().toString().replace(",", ""))*number));
                 }
             }
         });
@@ -160,5 +189,8 @@ public class ShowDetailActivity extends AppCompatActivity {
         ivMinus = findViewById(R.id.ivMinus);
         ivPlus = findViewById(R.id.ivPlus);
         clBack = findViewById(R.id.clBack);
+        lnPriceDiscount = findViewById(R.id.lnPriceDiscont);
+        tvDiscount = findViewById(R.id.tvDiscount);
+        tvPriceDisCount = findViewById(R.id.tvPriceDiscont);
     }
 }

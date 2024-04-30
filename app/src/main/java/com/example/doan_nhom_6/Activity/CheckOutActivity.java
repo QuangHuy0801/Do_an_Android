@@ -24,10 +24,12 @@ import com.example.doan_nhom_6.Adapter.CheckOutAdapter;
 import com.example.doan_nhom_6.Model.Address;
 import com.example.doan_nhom_6.Model.Cart;
 import com.example.doan_nhom_6.Model.Order;
+import com.example.doan_nhom_6.Model.Promotion;
 import com.example.doan_nhom_6.Model.User;
 import com.example.doan_nhom_6.R;
 import com.example.doan_nhom_6.Retrofit.CartAPI;
 import com.example.doan_nhom_6.Retrofit.OrderAPI;
+import com.example.doan_nhom_6.Retrofit.PromotionAPI;
 import com.example.doan_nhom_6.Somethings.ObjectSharedPreferences;
 import com.example.doan_nhom_6.Zalo.Api.CreateOrder;
 
@@ -51,12 +53,12 @@ public class CheckOutActivity extends AppCompatActivity {
     TextView tvUserName, tvAddress, tvTotalPrice, tvPhoneNumber, tvChangeAddress, tvAddAddress, tvPayWithZaloPay, tvPayOnDelivery;
     Button btnPlaceOrder;
     ConstraintLayout constraintLayoutAddress, constraintLayoutNotAddress, placeOrder, placeOrderSuccess;
-
     RadioButton rbPayOnDelivery, rbPayWithZaloPay;
-
     RecyclerView.Adapter checkOutAdapter;
-
     RecyclerView recyclerView;
+    int Total = 0;
+    int totalCalls;
+    int completedCalls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,7 +197,8 @@ public class CheckOutActivity extends AppCompatActivity {
 
     private void ivBackClick() {
         ivBack.setOnClickListener(v -> {
-            onBackPressed();
+            startActivity(new Intent(CheckOutActivity.this, CartActivity.class));
+            finish();
         });
     }
 
@@ -214,13 +217,39 @@ public class CheckOutActivity extends AppCompatActivity {
                 recyclerView.setAdapter(checkOutAdapter);
 
                 //load total price
-                int Total = 0;
-                for (Cart y : listCart) {
-                    Total += y.getCount() * y.getProduct().getPrice();
+                totalCalls = listCart.size();
+                completedCalls = 0;
+                for(Cart y: listCart){
+                    //Total += y.getCount() * y.getProduct().getPrice();
+                    int priceProduct = y.getProduct().getPrice();
+                    int count = y.getCount();
+
+                    PromotionAPI.promotionAPI.checkProDuctInPromotion(y.getProduct().getId()).enqueue(new Callback<Promotion>() {
+                        @Override
+                        public void onResponse(Call<Promotion> call, Response<Promotion> response) {
+                            Promotion promotion = response.body();
+                            if(promotion != null){
+                                Total += count * (priceProduct - priceProduct * promotion.getDiscountPercent());
+                            }
+                            else{
+                                Total += count * priceProduct;
+                            }
+                            completedCalls++; // Tăng biến đếm khi cuộc gọi mạng hoàn thành
+
+                            // Kiểm tra xem tất cả các cuộc gọi đã hoàn thành chưa
+                            if (completedCalls == totalCalls) {
+                                // Nếu đã hoàn thành tất cả các cuộc gọi, cập nhật giá trị tổng
+                                updateTotalPrice(Total);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Promotion> call, Throwable t) {
+                            Log.e("====", "Call API fail");
+                        }
+                    });
                 }
-                Locale localeEN = new Locale("en", "EN");
-                NumberFormat en = NumberFormat.getInstance(localeEN);
-                tvTotalPrice.setText(en.format(Total));
+
             }
 
             @Override
@@ -228,6 +257,12 @@ public class CheckOutActivity extends AppCompatActivity {
                 Log.e("====", "Call API Cart of user fail");
             }
         });
+    }
+
+    private void updateTotalPrice(int total) {
+        Locale localeEN = new Locale("en", "EN");
+        NumberFormat en = NumberFormat.getInstance(localeEN);
+        tvTotalPrice.setText(en.format(Total));
     }
 
     private void LoadAddress() {

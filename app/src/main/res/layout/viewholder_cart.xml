@@ -51,11 +51,12 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="$0"
+            android:layout_marginEnd="10dp"
             android:textColor="#373b54"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/constraintLayout3"
-            app:layout_constraintEnd_toEndOf="@+id/tvPrice"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/constraintLayout3"
             app:layout_constraintVertical_bias="0.428" />
 
@@ -63,15 +64,29 @@
             android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
             android:gravity="right"
             android:text="$0"
-            android:textColor="#373b54"
+            android:textColor="#FF5722"
             android:textSize="18sp"
             android:textStyle="normal"
-            app:layout_constraintBottom_toBottomOf="@+id/tvProductName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvProductName" />
+            android:layout_marginBottom="6dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvTotalPrice"
+            app:layout_constraintEnd_toEndOf="@id/tvTotalPrice"
+            app:layout_constraintStart_toStartOf="@+id/tvTotalPrice"/>
+
+        <TextView
+            android:id="@+id/tvPriceDiscountCart"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="$0"
+            android:textSize="17sp"
+            android:textStyle="normal"
+            android:layout_marginBottom="3dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvPrice"
+            app:layout_constraintEnd_toEndOf="@id/tvPrice"
+            app:layout_constraintStart_toStartOf="@+id/tvPrice"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout10"

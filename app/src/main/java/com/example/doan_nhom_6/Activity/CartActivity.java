@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -16,11 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.doan_nhom_6.Adapter.CartAdapter;
 import com.example.doan_nhom_6.Interface.CartItemInterface;
 import com.example.doan_nhom_6.Model.Cart;
+import com.example.doan_nhom_6.Model.Promotion;
 import com.example.doan_nhom_6.Model.User;
 import com.example.doan_nhom_6.R;
 import com.example.doan_nhom_6.Retrofit.CartAPI;
+import com.example.doan_nhom_6.Retrofit.PromotionAPI;
 import com.example.doan_nhom_6.Somethings.ObjectSharedPreferences;
 
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +39,12 @@ public class CartActivity extends AppCompatActivity implements CartItemInterface
     RecyclerView recyclerViewCart;
     Button btnCheckout;
     TextView tvTotalPrice;
-
     ImageView ivHome, ivUser, ivCart, ivHistory;
     ConstraintLayout clCartIsEmpty, clCart;
     List<Cart> listCart = new ArrayList<>();
-
+    int Total = 0;
+    int totalCalls;
+    int completedCalls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,7 @@ public class CartActivity extends AppCompatActivity implements CartItemInterface
     @Override
     protected void onResume() {
         super.onResume();
+        Total = 0;
         LoadCart();
     }
 
@@ -108,13 +114,39 @@ public class CartActivity extends AppCompatActivity implements CartItemInterface
                     cartAdapter = new CartAdapter(cartItemInterface, listCart, CartActivity.this);
                     recyclerViewCart.setAdapter(cartAdapter);
 
-                    int Total= 0;
+                    totalCalls = listCart.size();
+                    completedCalls = 0;
                     for(Cart y: listCart){
-                        Total += y.getCount()*y.getProduct().getPrice();
+                        //Total += y.getCount() * y.getProduct().getPrice();
+                        int priceProduct = y.getProduct().getPrice();
+                        int count = y.getCount();
+
+                        PromotionAPI.promotionAPI.checkProDuctInPromotion(y.getProduct().getId()).enqueue(new Callback<Promotion>() {
+                            @Override
+                            public void onResponse(Call<Promotion> call, Response<Promotion> response) {
+                                Promotion promotion = response.body();
+                                if(promotion != null){
+                                    Total += count * (priceProduct - priceProduct * promotion.getDiscountPercent());
+                                }
+                                else{
+                                    Total += count * priceProduct;
+                                }
+                                completedCalls++; // Tăng biến đếm khi cuộc gọi mạng hoàn thành
+
+                                // Kiểm tra xem tất cả các cuộc gọi đã hoàn thành chưa
+                                if (completedCalls == totalCalls) {
+                                    // Nếu đã hoàn thành tất cả các cuộc gọi, cập nhật giá trị tổng
+                                    updateTotalPrice(Total);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Promotion> call, Throwable t) {
+                                Log.e("====", "Call API check product in promotion fail");
+                            }
+                        });
                     }
-                    Locale localeEN = new Locale("en", "EN");
-                    NumberFormat en = NumberFormat.getInstance(localeEN);
-                    tvTotalPrice.setText(en.format(Total));
+
                 }
             }
             @Override
@@ -123,6 +155,13 @@ public class CartActivity extends AppCompatActivity implements CartItemInterface
             }
         });
     }
+
+    private void updateTotalPrice(int total) {
+        Locale localeEN = new Locale("en", "EN");
+        NumberFormat en = NumberFormat.getInstance(localeEN);
+        tvTotalPrice.setText(en.format(Total));
+    }
+
     private void setControl() {
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
         ivHome = findViewById(R.id.ivHome);
@@ -145,5 +184,10 @@ public class CartActivity extends AppCompatActivity implements CartItemInterface
             clCart.setVisibility(View.GONE);
         }
         tvTotalPrice.setText(en.format(total));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

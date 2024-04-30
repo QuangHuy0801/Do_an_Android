@@ -19,7 +19,7 @@ import com.example.doan_nhom_6.Somethings.ObjectSharedPreferences;
 
 public class IventoryFragment extends Fragment {
 
-    CardView cvCategory, cvProduct, cvUser, cvOrder, cvRevenue;
+    CardView cvCategory, cvPromotion, cvUser, cvOrder, cvRevenue;
 
     @Nullable
     @Override
@@ -42,6 +42,10 @@ public class IventoryFragment extends Fragment {
         cvOrder.setOnClickListener(v -> {
             startActivity(new Intent(requireActivity(), AdminProductsActivity.class));
         });
+
+        cvPromotion.setOnClickListener(v -> {
+            startActivity(new Intent(requireActivity(), AdminPromotionActivity.class));
+        });
     }
 
     private void anhXa(View view) {
@@ -49,5 +53,6 @@ public class IventoryFragment extends Fragment {
         cvUser = view.findViewById(R.id.cvUser);
         cvOrder = view.findViewById(R.id.cvOrder);
         cvRevenue = view.findViewById(R.id.cvRevenue);
+        cvPromotion = view.findViewById(R.id.cvPromotion);
     }
 }

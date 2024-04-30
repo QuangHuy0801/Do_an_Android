@@ -111,7 +111,8 @@ public class ShowDetailActivity extends AppCompatActivity {
                     double Price = product.getPrice() - (product.getPrice() * promotion.getDiscountPercent());
                     tvPrice.setText(en.format(Price));
                     tvTotalPrice.setText(en.format(Price));
-                }else{
+                }
+                else {
                     lnPriceDiscount.setVisibility(View.GONE);
                     tvPrice.setText(en.format(product.getPrice()));
                     tvTotalPrice.setText(en.format(product.getPrice()));

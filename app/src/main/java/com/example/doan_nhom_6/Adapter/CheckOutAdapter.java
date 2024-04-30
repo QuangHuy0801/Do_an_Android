@@ -1,22 +1,30 @@
 package com.example.doan_nhom_6.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.doan_nhom_6.Model.Cart;
+import com.example.doan_nhom_6.Model.Promotion;
 import com.example.doan_nhom_6.R;
+import com.example.doan_nhom_6.Retrofit.PromotionAPI;
 
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CheckOutAdapter extends RecyclerView.Adapter<CheckOutAdapter.ViewHolder>{
     List<Cart> listCart;
@@ -45,9 +53,28 @@ public class CheckOutAdapter extends RecyclerView.Adapter<CheckOutAdapter.ViewHo
                 .into(holder.ivProductImage);
 
         holder.tvProductName.setText(cart.getProduct().getProduct_Name());
-        holder.tvProductPrice.setText(en.format(cart.getProduct().getPrice()));
         holder.tvCount.setText(cart.getCount()+"");
-        holder.tvTotalPrice.setText(en.format(cart.getCount() * cart.getProduct().getPrice()));
+
+        PromotionAPI.promotionAPI.checkProDuctInPromotion(cart.getProduct().getId()).enqueue(new Callback<Promotion>() {
+            @Override
+            public void onResponse(Call<Promotion> call, Response<Promotion> response) {
+                Promotion promotion = response.body();
+                if (promotion != null){
+                    int PriceDiscount = cart.getProduct().getPrice() - (int)(cart.getProduct().getPrice()* promotion.getDiscountPercent());
+                    holder.tvProductPrice.setText(en.format(PriceDiscount));
+                    holder.tvTotalPrice.setText(en.format(cart.getCount() * PriceDiscount));
+                }
+                else {
+                    holder.tvProductPrice.setText(en.format(cart.getProduct().getPrice()));
+                    holder.tvTotalPrice.setText(en.format(cart.getCount() * cart.getProduct().getPrice()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Promotion> call, Throwable t) {
+                Toast.makeText(context.getApplicationContext(), "Call API check product in promotion fail", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

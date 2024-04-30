@@ -4,12 +4,15 @@ import static java.lang.Integer.parseInt;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -19,9 +22,11 @@ import com.bumptech.glide.Glide;
 import com.example.doan_nhom_6.Activity.ShowDetailActivity;
 import com.example.doan_nhom_6.Interface.CartItemInterface;
 import com.example.doan_nhom_6.Model.Cart;
+import com.example.doan_nhom_6.Model.Promotion;
 import com.example.doan_nhom_6.Model.User;
 import com.example.doan_nhom_6.R;
 import com.example.doan_nhom_6.Retrofit.CartAPI;
+import com.example.doan_nhom_6.Retrofit.PromotionAPI;
 import com.example.doan_nhom_6.Somethings.ObjectSharedPreferences;
 
 import java.text.NumberFormat;
@@ -59,11 +64,37 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder>{
         holder.tvProductName.setText(cart.getProduct().getProduct_Name());
         Locale localeEN = new Locale("en", "EN");
         NumberFormat en = NumberFormat.getInstance(localeEN);
-        holder.tvPrice.setText(en.format(cart.getProduct().getPrice()));
-        holder.tvTotalPrice.setText(en.format(cart.getProduct().getPrice() * cart.getCount()));
+
         Glide.with(holder.itemView.getContext())
                 .load(cart.getProduct().getProductImage().get(0).getUrl_Image())
                 .into(holder.ivImage);
+
+        PromotionAPI.promotionAPI.checkProDuctInPromotion(cart.getProduct().getId()).enqueue(new Callback<Promotion>() {
+            @Override
+            public void onResponse(Call<Promotion> call, Response<Promotion> response) {
+                Promotion promotion = response.body();
+                if(promotion != null){
+                    holder.tvPriceDiscount.setVisibility(View.VISIBLE);
+                    holder.tvPriceDiscount.setPaintFlags(holder.tvPriceDiscount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    holder.tvPriceDiscount.getPaint().setFakeBoldText(true);
+                    holder.tvPriceDiscount.setTextColor(Color.BLACK);
+                    holder.tvPriceDiscount.setText(en.format(cart.getProduct().getPrice()));
+                    double Price = cart.getProduct().getPrice() - (cart.getProduct().getPrice() * promotion.getDiscountPercent());
+                    holder.tvPrice.setText(en.format(Price));
+                    holder.tvTotalPrice.setText(en.format(Price * cart.getCount()));
+                }else{
+                    holder.tvPriceDiscount.setVisibility(View.INVISIBLE);
+                    holder.tvPrice.setText(en.format(cart.getProduct().getPrice()));
+                    holder.tvTotalPrice.setText(en.format(cart.getProduct().getPrice() * cart.getCount()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Promotion> call, Throwable t) {
+                Toast.makeText(context.getApplicationContext(), "Call API check product in promotion fail", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 //        int Total= 0;
 //        for(Cart y: carts){
 //            Total += y.getCount()*y.getProduct().getPrice();
@@ -104,7 +135,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder>{
                 CartAPI.cartAPI.addToCart(user.getId(), cart.getProduct().getId(), 1).enqueue(new Callback<Cart>() {
                     @Override
                     public void onResponse(Call<Cart> call, Response<Cart> response) {
-                        int price = cart.getProduct().getPrice();
+                        int price = parseInt(holder.tvPrice.getText().toString().replace(",",""));
                         holder.tvCount.setText(parseInt(holder.tvCount.getText().toString())+1+"");
                         holder.tvTotalPrice.setText(en.format(price * parseInt(holder.tvCount.getText().toString())));
                         cartItemInterface.onClickUpdatePrice(price);
@@ -123,7 +154,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder>{
                 CartAPI.cartAPI.addToCart(user.getId(), cart.getProduct().getId(), -1).enqueue(new Callback<Cart>() {
                     @Override
                     public void onResponse(Call<Cart> call, Response<Cart> response) {
-                        int price = cart.getProduct().getPrice();
+                        int price = parseInt(holder.tvPrice.getText().toString().replace(",",""));
                         holder.tvCount.setText(parseInt(holder.tvCount.getText().toString())-1+"");
                         holder.tvTotalPrice.setText(en.format(price * parseInt(holder.tvCount.getText().toString())));
                         cartItemInterface.onClickUpdatePrice(price*-1);
@@ -144,9 +175,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder>{
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTotalPrice, tvPrice, tvProductName, tvCount;
+        TextView tvTotalPrice, tvPrice, tvProductName, tvCount, tvPriceDiscount;
         ImageView ivImage, ivPlus, ivMinus;
-
         ConstraintLayout layout_delete;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -158,6 +188,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder>{
             ivImage = itemView.findViewById(R.id.ivImage);
             ivPlus = itemView.findViewById(R.id.ivPlus);
             ivMinus = itemView.findViewById(R.id.ivMinus);
+            tvPriceDiscount = itemView.findViewById(R.id.tvPriceDiscountCart);
         }
     }
 }

@@ -1,11 +1,14 @@
 package com.example.doan_nhom_6.Retrofit;
 
+import com.example.doan_nhom_6.Model.Product;
 import com.example.doan_nhom_6.Model.Promotion;
+import com.example.doan_nhom_6.Model.Promotion_Item;
 
 import java.util.List;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
@@ -43,4 +46,9 @@ public interface PromotionAPI {
     @DELETE("/promotion/delete/{id}")
     Call<Promotion> DeletePromotion(@Path("id") int id);
 
+    @DELETE("/promotion/deleteProduct/{id}")
+    Call<Promotion_Item> DeleteProductInPromotion(@Path("id") int id);
+
+    @PUT("/promotion/addProduct")
+    Call<Promotion> addProductInPromotion(@Query("promotionId") int promotionId, @Body List<Product> products);
 }

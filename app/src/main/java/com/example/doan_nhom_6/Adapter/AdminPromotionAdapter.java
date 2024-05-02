@@ -3,6 +3,7 @@ package com.example.doan_nhom_6.Adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.doan_nhom_6.Activity.ShowDetailActivity;
+import com.example.doan_nhom_6.Activity.ShowPromotionDetailActivity;
 import com.example.doan_nhom_6.Model.Category;
 import com.example.doan_nhom_6.Model.Product;
 import com.example.doan_nhom_6.Model.Promotion;
@@ -124,7 +127,9 @@ public class AdminPromotionAdapter extends RecyclerView.Adapter<AdminPromotionAd
         holder.ivHotSale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(holder.itemView.getContext(), ShowPromotionDetailActivity.class);
+                intent.putExtra("promotion", promotion);
+                holder.itemView.getContext().startActivity(intent);
             }
         });
     }

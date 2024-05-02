@@ -59,4 +59,6 @@ public interface ProductAPI {
                                 @Part("product_is_selling") RequestBody productIsSelling,
                                 @Part("product_is_active") RequestBody productIsActive);
 
+    @GET("/product/notInPromotion")
+    Call<List<Product>> getProductNotInPromotion();
 }
